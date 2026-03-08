@@ -1,108 +1,112 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <title>Calibrador de Sensibilidad</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #e60000;
-        }
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 10px;
-            background-color: #e60000;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #cc0000;
-        }
-        .resultado {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #ffe6e6;
-            border: 1px solid #e60000;
-            border-radius: 4px;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Juego de Casino Ficticio</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  #slot {
+    font-size: 50px;
+    margin: 20px 0;
+  }
+
+  .symbol {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    margin: 0 10px;
+    background-color: #34495e;
+    border-radius: 10px;
+    font-size: 24px;
+  }
+
+  #result {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #27ae60;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  button:hover {
+    background-color: #2ecc71;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h2>Calibrador de Sensibilidad</h2>
-        <form id="calibrarForm">
-            <label for="marca">Marca:</label>
-            <input type="text" id="marca" placeholder="Ejemplo: Samsung" required />
 
-            <label for="modelo">Modelo:</label>
-            <input type="text" id="modelo" placeholder="Ejemplo: Galaxy S21" required />
+<h1>Casino Ficticio</h1>
+<p>Tu saldo: <span id="saldo">100</span> créditos</p>
 
-            <button type="button" onclick="calibrarSensibilidad()">Generar Sensibilidad</button>
-        </form>
-        <div class="resultado" id="resultado"></div>
-    </div>
+<div id="slot">
+  <div class="symbol" id="symbol1">🍒</div>
+  <div class="symbol" id="symbol2">🍒</div>
+  <div class="symbol" id="symbol3">🍒</div>
+</div>
 
-    <script>
-        function calibrarSensibilidad() {
-            const marca = document.getElementById('marca').value;
-            const modelo = document.getElementById('modelo').value;
+<button id="jugar">¡Jugar!</button>
 
-            // Aquí puedes agregar la lógica para calcular la sensibilidad.
-            // Como ejemplo, usaremos valores ficticios o una fórmula simple.
+<div id="result"></div>
 
-            // Ejemplo: Sensibilidad basada en la longitud del nombre de la marca y modelo
-            let sensibilidadGeneral = Math.min(200, marca.length * 10 + modelo.length * 5);
-            let sensibilidadPuntoRojo = Math.min(200, sensibilidadGeneral - 10);
-            let sensibilidadMiraX2 = Math.min(200, sensibilidadGeneral - 20);
-            let sensibilidadMiraX4 = Math.min(200, sensibilidadGeneral - 30);
+<script>
+  let saldo = 100;
+  const simbolos = ['🍒', '🍋', '🔔', '⭐', '🍀'];
 
-            // Tamaño del botón de disparo proporcional a la sensibilidad
-            const tamañoBotonDisparo = Math.max(10, sensibilidadGeneral / 10); // mínimo 10
+  const saldoSpan = document.getElementById('saldo');
+  const resultDiv = document.getElementById('result');
 
-            // La precisión puede ser una función inversa a la sensibilidad
-            const precision = Math.max(1, 100 - sensibilidadGeneral);
+  document.getElementById('jugar').addEventListener('click', () => {
+    if (saldo < 10) {
+      resultDiv.innerText = 'No tienes suficiente saldo para jugar.';
+      return;
+    }
 
-            const resultadoDiv = document.getElementById('resultado');
-            resultadoDiv.innerHTML = `
-                <h3>Configuración para ${marca} ${modelo}</h3>
-                <p>Sensibilidad General: ${sensibilidadGeneral}</p>
-                <p>Sensibilidad de Punto Rojo: ${sensibilidadPuntoRojo}</p>
-                <p>Sensibilidad Mira X2: ${sensibilidadMiraX2}</p>
-                <p>Sensibilidad Mira X4: ${sensibilidadMiraX4}</p>
-                <p>Tamaño del botón de disparo: ${tamañoBotonDisparo}</p>
-                <p>Precisión: ${precision}</p>
-            `;
-        }
-    </script>
+    saldo -= 10; // apuesta de 10 créditos
+    saldoSpan.innerText = saldo;
+
+    // Generar símbolos aleatorios
+    const s1 = simbolos[Math.floor(Math.random() * simbolos.length)];
+    const s2 = simbolos[Math.floor(Math.random() * simbolos.length)];
+    const s3 = simbolos[Math.floor(Math.random() * simbolos.length)];
+
+    document.getElementById('symbol1').innerText = s1;
+    document.getElementById('symbol2').innerText = s2;
+    document.getElementById('symbol3').innerText = s3;
+
+    // Comprobar ganancia
+    if (s1 === s2 && s2 === s3) {
+      // gana
+      const ganancia = 50; // premio
+      saldo += ganancia;
+      saldoSpan.innerText = saldo;
+      resultDiv.innerText = '¡Felicidades! Ganaste ' + ganancia + ' créditos.';
+    } else {
+      resultDiv.innerText = 'Inténtalo de nuevo.';
+    }
+  });
+</script>
+
 </body>
 </html>
