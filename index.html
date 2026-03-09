@@ -123,14 +123,21 @@ if(device=="PC Gamer") base=120
 if(device=="Laptop") base=125
 if(device=="Tablet Android") base=165
 
-let general=Math.min(base,200)
-let redDot=Math.min(base-5,200)
-let x2=Math.min(base-15,200)
-let x4=Math.min(base-25,200)
-let sniper=Math.min(base-35,200)
+/* Sensibilidad más precisa */
+
+let general=Math.min(base+3,200)
+
+let redDot=Math.min(Math.round(general*0.94),200)
+
+let x2=Math.min(Math.round(general*0.85),200)
+
+let x4=Math.min(Math.round(general*0.72),200)
+
+let sniper=Math.min(Math.round(general*0.58),200)
 
 /* CAMARA 360 MAX 100 */
-let cam360=Math.min(base-40,100)
+
+let cam360=Math.min(Math.round(general*0.50),100)
 
 document.getElementById("resultado").innerHTML=
 
@@ -147,6 +154,8 @@ MIRA X2: ${x2}
 MIRA X4: ${x4}
 <br>
 MIRA FRANCOTIRADOR: ${sniper}
+<br>
+BOTON DE CAMARA 360º: ${cam360}
 <br>
 
 `
