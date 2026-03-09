@@ -3,108 +3,234 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Juego de Casino Ficticio</title>
+<title>Casino Ficticio Avanzado</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #2c3e50;
-    color: #ecf0f1;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #fff;
     margin: 0;
     padding: 20px;
+    text-align: center;
   }
 
   h1 {
+    margin-bottom: 10px;
+  }
+
+  #saldo {
+    font-size: 20px;
     margin-bottom: 20px;
   }
 
-  #slot {
-    font-size: 50px;
+  /* Estilo para la máquina tragamonedas */
+  #slotMachine {
+    display: flex;
+    justify-content: center;
     margin: 20px 0;
   }
 
-  .symbol {
-    display: inline-block;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
+  .reel {
+    width: 80px;
+    height: 80px;
     margin: 0 10px;
-    background-color: #34495e;
+    font-size: 50px;
+    background-color: rgba(255,255,255,0.2);
     border-radius: 10px;
-    font-size: 24px;
-  }
-
-  #result {
-    font-size: 24px;
-    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px #000;
   }
 
   button {
-    padding: 10px 20px;
+    padding: 15px 30px;
     font-size: 16px;
     border: none;
     border-radius: 8px;
     background-color: #27ae60;
-    color: white;
+    color: #fff;
     cursor: pointer;
-    margin-top: 20px;
+    margin: 10px;
+    transition: background-color 0.3s;
   }
 
   button:hover {
     background-color: #2ecc71;
   }
+
+  /* Ruleta */
+  #rouletteContainer {
+    margin-top: 40px;
+  }
+
+  #roulette {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border: 10px solid #fff;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #ffe600, #ff8c00);
+    box-shadow: inset 0 0 20px #000;
+  }
+
+  #pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid #fff;
+  }
+
+  #spinBtn {
+    margin-top: 20px;
+  }
+
+  #result {
+    margin-top: 20px;
+    font-size: 24px;
+  }
 </style>
 </head>
 <body>
 
-<h1>Casino Ficticio</h1>
-<p>Tu saldo: <span id="saldo">100</span> créditos</p>
+<h1>Casino Ficticio Avanzado</h1>
+<div id="saldo">Saldo: <span id="saldoValor">1000</span> créditos</div>
 
-<div id="slot">
-  <div class="symbol" id="symbol1">🍒</div>
-  <div class="symbol" id="symbol2">🍒</div>
-  <div class="symbol" id="symbol3">🍒</div>
+<!-- Máquina tragamonedas -->
+<h2>Máquina Tragamonedas</h2>
+<div id="slotMachine">
+  <div class="reel" id="reel1">🍒</div>
+  <div class="reel" id="reel2">🍒</div>
+  <div class="reel" id="reel3">🍒</div>
 </div>
+<button id="spinBtn">¡Girar!</button>
+<div id="slotResult"></div>
 
-<button id="jugar">¡Jugar!</button>
-
+<!-- Ruleta -->
+<h2>Ruleta</h2>
+<div id="rouletteContainer">
+  <div id="roulette">
+    <div id="pointer"></div>
+    <!-- La ruleta tendrá segmentos de colores -->
+  </div>
+  <button id="spinRoulette">Girar Ruleta</button>
+</div>
 <div id="result"></div>
 
+<!-- Música de fondo -->
+<audio id="musicaFondo" autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+  Tu navegador no soporta audio.
+</audio>
+
 <script>
-  let saldo = 100;
+  let saldo = 1000;
+  const saldoSpan = document.getElementById('saldoValor');
+
+  // Datos para la tragamonedas
   const simbolos = ['🍒', '🍋', '🔔', '⭐', '🍀'];
+  const reels = [
+    document.getElementById('reel1'),
+    document.getElementById('reel2'),
+    document.getElementById('reel3')
+  ];
 
-  const saldoSpan = document.getElementById('saldo');
-  const resultDiv = document.getElementById('result');
-
-  document.getElementById('jugar').addEventListener('click', () => {
-    if (saldo < 10) {
-      resultDiv.innerText = 'No tienes suficiente saldo para jugar.';
+  document.getElementById('spinBtn').addEventListener('click', () => {
+    if (saldo < 50) {
+      alert('No tienes suficiente saldo para jugar.');
       return;
     }
-
-    saldo -= 10; // apuesta de 10 créditos
+    saldo -= 50; // apuesta
     saldoSpan.innerText = saldo;
 
-    // Generar símbolos aleatorios
-    const s1 = simbolos[Math.floor(Math.random() * simbolos.length)];
-    const s2 = simbolos[Math.floor(Math.random() * simbolos.length)];
-    const s3 = simbolos[Math.floor(Math.random() * simbolos.length)];
-
-    document.getElementById('symbol1').innerText = s1;
-    document.getElementById('symbol2').innerText = s2;
-    document.getElementById('symbol3').innerText = s3;
-
-    // Comprobar ganancia
-    if (s1 === s2 && s2 === s3) {
-      // gana
-      const ganancia = 50; // premio
-      saldo += ganancia;
-      saldoSpan.innerText = saldo;
-      resultDiv.innerText = '¡Felicidades! Ganaste ' + ganancia + ' créditos.';
-    } else {
-      resultDiv.innerText = 'Inténtalo de nuevo.';
+    // Animar los carretes
+    let results = [];
+    for (let i=0; i<3; i++) {
+      const rand = Math.floor(Math.random() * simbolos.length);
+      reels[i].innerText = simbolos[rand];
+      results.push(simbolos[rand]);
     }
+
+    // Verificar coincidencias
+    if (results[0] === results[1] && results[1] === results[2]) {
+      const premio = 200;
+      saldo += premio;
+      saldoSpan.innerText = saldo;
+      document.getElementById('slotResult').innerText = '¡Ganaste ' + premio + ' créditos!';
+    } else {
+      document.getElementById('slotResult').innerText = 'Inténtalo de nuevo!';
+    }
+  });
+
+  // Ruleta
+  const roulette = document.getElementById('roulette');
+  const pointer = document.getElementById('pointer');
+  const resultDiv = document.getElementById('result');
+  const spinRouletteBtn = document.getElementById('spinRoulette');
+
+  // Segmentos de la ruleta
+  const segments = ['rojo', 'negro', 'rojo', 'negro', 'rojo', 'negro'];
+  // Crear segmentos visuales
+  segments.forEach((color, index) => {
+    const segment = document.createElement('div');
+    segment.style.position = 'absolute';
+    segment.style.width = '50%';
+    segment.style.height = '50%';
+    segment.style.backgroundColor = color;
+    segment.style.transform = `rotate(${index * 60}deg) skewY(-30deg)`;
+    segment.style.transformOrigin = 'bottom right';
+    roulette.appendChild(segment);
+  });
+
+  let spinning = false;
+
+  document.getElementById('spinRoulette').addEventListener('click', () => {
+    if (spinning || saldo < 100) {
+      alert('No puedes girar ahora.');
+      return;
+    }
+    saldo -= 100; // apuesta
+    saldoSpan.innerText = saldo;
+    spinning = true;
+    resultDiv.innerText = '';
+
+    // Rotar la ruleta
+    const rotations = Math.floor(Math.random() * 360) + 720; // mínimo 2 vueltas
+    const duration = 4000; // ms
+    const start = performance.now();
+
+    function animate(time) {
+      const elapsed = time - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const angle = rotations * progress;
+      roulette.style.transform = `rotate(${angle}deg)`;
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // determinar resultado
+        const finalAngle = rotations % 360;
+        const segmentIndex = Math.floor(finalAngle / 60);
+        const color = segments[segmentIndex];
+        if (color === 'rojo') {
+          // gana
+          const premio = 300;
+          saldo += premio;
+          saldoSpan.innerText = saldo;
+          resultDiv.innerText = '¡Gana! ¡Ganaste ' + premio + ' créditos!';
+        } else {
+          resultDiv.innerText = 'Perdiste en la ruleta.';
+        }
+        spinning = false;
+      }
+    }
+    requestAnimationFrame(animate);
   });
 </script>
 
