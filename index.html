@@ -8,18 +8,17 @@
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- BABEL DEBE IR ANTES -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 </head>
+
 <body class="bg-black">
 
 <div id="root"></div>
 
 <script type="text/babel">
 
-const { Link } = ReactRouterDOM;
+const { Link, HashRouter } = ReactRouterDOM;
 
 function createPageUrl(page){
   return "#" + page;
@@ -70,7 +69,7 @@ function Layout({ children, currentPageName }) {
 
       </div>
 
-      {/* Page content with top padding for nav */}
+      {/* Page content */}
       <div className="w-full h-full pt-[38px]">
         {children}
       </div>
@@ -81,11 +80,13 @@ function Layout({ children, currentPageName }) {
 
 function App(){
   return (
-    <Layout currentPageName="RacingGame">
-      <div className="text-white text-center mt-20">
-        <h1>Game Page</h1>
-      </div>
-    </Layout>
+    <HashRouter>
+      <Layout currentPageName="RacingGame">
+        <div className="text-white text-center mt-20">
+          <h1>Game Page</h1>
+        </div>
+      </Layout>
+    </HashRouter>
   )
 }
 
