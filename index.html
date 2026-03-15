@@ -23,8 +23,11 @@ header{background:linear-gradient(90deg,#ff512f,#dd2476);color:white;padding:50p
 .admin-btn{display:block;margin:60px auto 20px auto;background:black;color:white;border:none;padding:14px 30px;border-radius:10px;font-size:16px;cursor:pointer}
 
 #adminPanel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:white;overflow:auto;padding:40px}
-#ordersList{max-width:700px;margin:auto}
-.order{background:#f4f4f4;margin:10px 0;padding:15px;border-radius:8px}
+#ordersList{max-width:800px;margin:auto}
+
+.order{background:#f4f4f4;margin:12px 0;padding:15px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+
+.done-btn{background:#0f9b0f;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer}
 
 .dashboard{max-width:700px;margin:20px auto;display:flex;gap:20px;justify-content:center}
 .stat{background:#222;color:white;padding:20px;border-radius:12px;text-align:center;flex:1}
@@ -41,7 +44,7 @@ footer{background:#222;color:white;text-align:center;padding:25px;margin-top:40p
 <div class="card-content">
 <h3>Canelones de Carne</h3>
 <p>Carne con salsa de tomate.</p>
-<div class="price" data-price="5500">$5.500</div>
+<div class="price">$5.500</div>
 <button class="add-btn" onclick="addOrder('Canelones de Carne',5500)">Agregar</button>
 </div>
 </div><div class="card">
@@ -108,13 +111,41 @@ footer{background:#222;color:white;text-align:center;padding:25px;margin-top:40p
 </footer><script>
 let orders = JSON.parse(localStorage.getItem('orders') || '[]');
 let totalSales = JSON.parse(localStorage.getItem('sales') || '0');
+let orderCounter = JSON.parse(localStorage.getItem('orderCounter') || '0');
+
+function playSound(){
+let audio = new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+audio.play();
+}
 
 function addOrder(item,price){
-orders.push(item);
+let name = prompt('Nombre del cliente');
+if(!name || name.trim()===''){
+alert('Debes ingresar un nombre');
+return;
+}
+
+orderCounter++;
+
+let order = {
+id:orderCounter,
+name:name,
+item:item,
+price:price,
+time:new Date().toLocaleTimeString(),
+done:false
+};
+
+orders.push(order);
 totalSales += price;
+
 localStorage.setItem('orders',JSON.stringify(orders));
 localStorage.setItem('sales',JSON.stringify(totalSales));
-alert('Agregado al pedido');
+localStorage.setItem('orderCounter',JSON.stringify(orderCounter));
+
+playSound();
+
+alert('Pedido #' + orderCounter + ' agregado para ' + name);
 }
 
 function openAdmin(){
@@ -129,18 +160,40 @@ function closeAdmin(){
 document.getElementById('adminPanel').style.display='none';
 }
 
+function markDone(index){
+orders[index].done = true;
+localStorage.setItem('orders',JSON.stringify(orders));
+showOrders();
+}
+
 function showOrders(){
 let list=document.getElementById('ordersList');
 list.innerHTML='';
-orders.forEach(o=>{
+
+orders.forEach((o,i)=>{
 let div=document.createElement('div');
 div.className='order';
-div.innerText=o;
-list.appendChild(div);
+
+let text=document.createElement('span');
+text.innerText = '#'+o.id+' - '+o.name+' pidió '+o.item+' ('+o.time+')';
+
+let btn=document.createElement('button');
+btn.className='done-btn';
+btn.innerText = o.done ? 'Entregado' : 'Marcar entregado';
+btn.disabled = o.done;
+btn.onclick = ()=>markDone(i);
+
+if(o.done){
+text.style.textDecoration='line-through';
+}
+
+ div.appendChild(text);
+ div.appendChild(btn);
+ list.appendChild(div);
 });
 
-document.getElementById('totalOrders').innerText = orders.length;
-document.getElementById('totalSales').innerText = '$'+ totalSales.toLocaleString();
+ document.getElementById('totalOrders').innerText = orders.length;
+ document.getElementById('totalSales').innerText = '$'+ totalSales.toLocaleString();
 }
 </script></body>
-</html>
+  </html>
