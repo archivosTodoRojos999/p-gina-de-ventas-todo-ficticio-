@@ -2,130 +2,112 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Juego de Auto de Carrera</title>
+<title>ENDEX UI Simulation</title>
+
 <style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        background: black;
-    }
-    canvas {
-        display: block;
-        margin: auto;
-        background: black;
-    }
-</style>
-</head>
-<body>
-
-<canvas id="juego" width="800" height="600"></canvas>
-
-<script>
-// ================== CÓDIGO ORIGINAL (NO BORRADO) ==================
-/*
-import pygame
-import sys
-
-# Inicializar pygame
-pygame.init()
-
-# Crear ventana
-ANCHO = 800
-ALTO = 600
-ventana = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Juego de Auto de Carrera")
-
-# Colores
-NEGRO = (0, 0, 0)
-BLANCO = (255, 255, 255)
-ROJO = (255, 0, 0)
-
-# Auto
-auto_ancho = 50
-auto_alto = 80
-x = ANCHO // 2 - auto_ancho // 2
-y = ALTO - auto_alto - 10
-velocidad = 5
-
-# Bucle del juego
-reloj = pygame.time.Clock()
-
-while True:
-    for evento in pygame.event.get():
-        if evento.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-
-    # Movimiento del auto
-    teclas = pygame.key.get_pressed()
-    if teclas[pygame.K_LEFT] and x > 0:
-        x -= velocidad
-    if teclas[pygame.K_RIGHT] and x < ANCHO - auto_ancho:
-        x += velocidad
-    if teclas[pygame.K_UP] and y > 0:
-        y -= velocidad
-    if teclas[pygame.K_DOWN] and y < ALTO - auto_alto:
-        y += velocidad
-
-    # Dibujar
-    ventana.fill(NEGRO)
-    pygame.draw.rect(ventana, ROJO, (x, y, auto_ancho, auto_alto))
-    pygame.display.update()
-
-    reloj.tick(60)
-*/
-// ================================================================
-
-// Configuración
-const canvas = document.getElementById("juego");
-const ctx = canvas.getContext("2d");
-
-const ANCHO = 800;
-const ALTO = 600;
-
-// Colores
-const NEGRO = "black";
-const ROJO = "red";
-
-// Auto
-let auto_ancho = 50;
-let auto_alto = 80;
-let x = ANCHO / 2 - auto_ancho / 2;
-let y = ALTO - auto_alto - 10;
-let velocidad = 5;
-
-// Controles
-let teclas = {};
-
-document.addEventListener("keydown", (e) => {
-    teclas[e.key] = true;
-});
-
-document.addEventListener("keyup", (e) => {
-    teclas[e.key] = false;
-});
-
-// Bucle del juego
-function juego() {
-
-    // Movimiento
-    if (teclas["ArrowLeft"] && x > 0) x -= velocidad;
-    if (teclas["ArrowRight"] && x < ANCHO - auto_ancho) x += velocidad;
-    if (teclas["ArrowUp"] && y > 0) y -= velocidad;
-    if (teclas["ArrowDown"] && y < ALTO - auto_alto) y += velocidad;
-
-    // Dibujar
-    ctx.fillStyle = NEGRO;
-    ctx.fillRect(0, 0, ANCHO, ALTO);
-
-    ctx.fillStyle = ROJO;
-    ctx.fillRect(x, y, auto_ancho, auto_alto);
-
-    requestAnimationFrame(juego);
+body {
+    margin: 0;
+    background: black;
+    color: #00ffcc;
+    font-family: monospace;
+    overflow: hidden;
 }
 
-// Iniciar juego
-juego();
+/* Contenedor principal */
+.terminal {
+    padding: 20px;
+    height: 100vh;
+}
+
+/* Texto tipo consola */
+.line {
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid #00ffcc;
+    animation: typing 2s steps(40, end), blink 0.8s infinite;
+}
+
+/* Animación de escritura */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+/* Cursor parpadeando */
+@keyframes blink {
+    50% { border-color: transparent }
+}
+
+/* Efecto glitch */
+.glitch {
+    color: #ff00ff;
+    animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(1px, -1px); }
+    25% { transform: translate(-1px, 1px); }
+    50% { transform: translate(1px, 1px); }
+    75% { transform: translate(-1px, -1px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Fondo tipo grid neon */
+.grid {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40%;
+    background: repeating-linear-gradient(
+        to top,
+        rgba(128,0,255,0.2) 0px,
+        rgba(128,0,255,0.2) 2px,
+        transparent 2px,
+        transparent 20px
+    );
+    transform: perspective(400px) rotateX(60deg);
+}
+</style>
+</head>
+
+<body>
+
+<div class="terminal" id="terminal"></div>
+<div class="grid"></div>
+
+<script>
+const lines = [
+    "Initializing ENDEX_UI...",
+    "Connecting to secure server...",
+    "Access granted ✔",
+    "Loading modules...",
+    "Decrypting data...",
+    "System override enabled",
+    "WARNING: Unauthorized access detected",
+    "Bypassing firewall...",
+    "ENDEX CORE ACTIVE"
+];
+
+let i = 0;
+
+function typeLine() {
+    if (i < lines.length) {
+        const div = document.createElement("div");
+        div.classList.add("line");
+
+        if (Math.random() > 0.7) {
+            div.classList.add("glitch");
+        }
+
+        div.textContent = lines[i];
+        document.getElementById("terminal").appendChild(div);
+
+        i++;
+        setTimeout(typeLine, 1200);
+    }
+}
+
+typeLine();
 </script>
 
 </body>
