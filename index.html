@@ -110,7 +110,7 @@
       `;
 
       let precision = Math.floor((sens.general + sens.redDot + sens.freeLook) / 5);
-      if (precision < 99) precision = 99;
+      if (precision < 99) precision = 100;
       if (precision > 100) precision = 100;
 
       headshotEl.innerHTML = `🎯 HEADSHOT PRECISION: ${precision}%`;
