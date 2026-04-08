@@ -10,7 +10,7 @@ body {
   margin: 0;
   font-family: monospace;
   background: black;
-  color: #a855f7;
+  color: #00eaff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,72 +28,71 @@ body {
 /* Caja */
 .box {
   width: 95%;
-  max-width: 360px;
+  max-width: 340px;
   padding: 15px;
-  border: 2px solid #a855f7;
-  background: rgba(0,0,0,0.8);
-  box-shadow: 0 0 20px #a855f7;
+  border: 2px solid #00eaff;
+  background: rgba(0,0,0,0.85);
+  box-shadow: 0 0 20px #00eaff;
 }
 
-/* Inputs */
-input, select {
+/* Inputs MÁS CHICOS */
+input {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
+  padding: 8px; /* 🔥 más chico */
+  margin-top: 8px;
   background: black;
-  border: 1px solid #a855f7;
-  color: #a855f7;
-  font-size: 16px;
+  border: 1px solid #00eaff;
+  color: #00eaff;
+  font-size: 14px;
 }
 
 /* Botones rango */
 .range {
   display: flex;
-  justify-content: space-between;
+  gap: 5px;
   margin-top: 10px;
 }
 
 .range button {
-  width: 32%;
-  padding: 10px;
-  border: 1px solid #a855f7;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #00eaff;
   background: black;
-  color: #a855f7;
+  color: #00eaff;
 }
 
 .range button.active {
-  background: #a855f7;
+  background: #00eaff;
   color: black;
 }
 
-/* Panel estilo consola */
+/* Panel */
 .panel {
   margin-top: 15px;
-  border: 1px solid #a855f7;
+  border: 1px solid #00eaff;
   padding: 10px;
-  font-size: 13px;
+  font-size: 12px;
   text-align: left;
-  box-shadow: 0 0 10px #a855f7 inset;
-  word-wrap: break-word;
+  box-shadow: 0 0 10px #00eaff inset;
 }
 
-/* Botones generar */
+/* Botones */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   margin-top: 10px;
 }
 
 .actions button {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #a855f7;
+  padding: 10px;
+  border: 1px solid #00eaff;
   background: black;
-  color: #a855f7;
+  color: #00eaff;
 }
 
 .actions button:hover {
-  background: #a855f7;
+  background: #00eaff;
   color: black;
 }
 </style>
@@ -107,8 +106,8 @@ input, select {
 
 <h3>⚡ SENCI PRO SALITA</h3>
 
-<input id="marca" placeholder="Marca (Ej: Xiaomi)">
-<input id="modelo" placeholder="Modelo (Ej: GT 30 Pro)">
+<input id="marca" placeholder="Marca">
+<input id="modelo" placeholder="Modelo">
 
 <div class="range">
   <button id="alta">ALTA</button>
@@ -150,7 +149,6 @@ function generar(dpi) {
   }
 
   let base = marca.length * modelo.length;
-
   let mult = rango === "ALTA" ? 1.1 : rango === "MEDIA" ? 1 : 0.9;
 
   let sens = {
@@ -178,7 +176,7 @@ DPI : ${dpi ? "411" : "PREDETERMINADO"}
 `;
 }
 
-/* Fondo animado */
+/* Fondo azul flúor */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -199,9 +197,9 @@ function draw(){
   ctx.fillStyle="rgba(0,0,0,0.3)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  ctx.strokeStyle="#d400ff";
+  ctx.strokeStyle="#00eaff";
   ctx.shadowBlur=15;
-  ctx.shadowColor="#d400ff";
+  ctx.shadowColor="#00eaff";
 
   lines.forEach(l=>{
     ctx.beginPath();
