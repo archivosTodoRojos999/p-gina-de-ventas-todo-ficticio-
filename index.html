@@ -2,311 +2,265 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>SENCI PRO</title>
+<title>SENCI PRO SALITA</title>
 
 <style>
-* {margin:0;padding:0;box-sizing:border-box;}
-
-body {
-  font-family: monospace;
-  background: black;
-  color: #00eaff;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body{
+margin:0;
+background:#000;
+font-family:Arial;
+overflow:hidden;
 }
 
-/* FONDO */
-#fondo {
-  position: fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  z-index:-1;
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:0;
 }
 
-.container {
-  display:flex;
-  gap:12px;
-  width:95%;
-  max-width:900px;
+.panel{
+position:relative;
+z-index:2;
+width:90%;
+max-width:350px;
+margin:80px auto;
+padding:15px;
+border:2px solid #00eaff;
+box-shadow:0 0 20px #00eaff;
+color:#00eaff;
+background:#000;
 }
 
-.box, .resultado, .vipPanel {
-  width:50%;
-  padding:18px;
-  border:2px solid #00eaff;
-  background:black;
-  box-shadow:0 0 20px #00eaff;
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#000;
+border:1px solid #00eaff;
+color:#00eaff;
 }
 
-.resultado, .vipPanel {display:none;}
-
-input {
-  width:100%;
-  padding:10px;
-  margin-top:8px;
-  background:black;
-  border:1px solid #00eaff;
-  color:#00eaff;
+button{
+width:32%;
+padding:10px;
+margin:5px 1%;
+background:#000;
+border:1px solid #00eaff;
+color:#00eaff;
+cursor:pointer;
+transition:0.3s;
 }
 
-button {
-  width:100%;
-  padding:10px;
-  margin-top:8px;
-  background:black;
-  border:1px solid #00eaff;
-  color:#00eaff;
-  cursor:pointer;
-  transition:0.2s;
+button:active{
+background:#00eaff;
+color:#000;
 }
 
-button:active {
-  transform:scale(0.95);
-  background:#00eaff;
-  color:black;
-  box-shadow:0 0 15px #00eaff;
+#resultado{
+margin-top:10px;
+padding:10px;
+border:1px solid #00eaff;
 }
 
-.range {display:flex;gap:5px;}
-.range button.active {background:#00eaff;color:black;}
-
-#loader {display:none;margin-top:10px;}
-
-/* BOTÓN VIP */
+/* BOTON VIP */
 #vipBtn{
-  position:fixed;
-  bottom:10px;
-  right:10px;
-  padding:6px 10px;
-  font-size:10px;
-  opacity:0.3;
-  border:1px solid #00eaff;
+position:fixed;
+top:50%;
+right:10px;
+transform:translateY(-50%);
+width:65px;
+height:65px;
+border-radius:50%;
+background:#000;
+color:#FFD700;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+border:2px solid #FFD700;
+box-shadow:0 0 10px #FFD700,0 0 30px #FFD700;
+cursor:pointer;
+z-index:9999;
+animation:brilloVIP 2s infinite;
 }
 
-/* LOGIN VIP */
-#loginVip{
-  display:none;
-  position:fixed;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  background:black;
-  border:2px solid #00eaff;
-  padding:15px;
-  box-shadow:0 0 20px #00eaff;
+@keyframes brilloVIP{
+0%{box-shadow:0 0 10px #FFD700;}
+50%{box-shadow:0 0 40px #FFD700;}
+100%{box-shadow:0 0 10px #FFD700;}
 }
 
-@media(max-width:600px){
-.container{flex-direction:column;}
-.box,.resultado,.vipPanel{width:100%;}
+/* PANEL VIP FULL */
+#panelVIP{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+color:red;
+z-index:99999;
+padding:20px;
+overflow:auto;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="fondo"></canvas>
+<canvas id="bg"></canvas>
 
-<div class="container">
+<div class="panel">
+<h3>⚡ SENCI PRO SALITA</h3>
 
-<div class="box">
-<h2>⚡ SENCI PRO SALITA</h2>
+<input id="marca" placeholder="Marca del dispositivo">
+<input id="modelo" placeholder="Modelo del dispositivo">
 
-<input id="marca" placeholder="Marca">
-<input id="modelo" placeholder="Modelo">
+<button onclick="setRango('ALTA')">ALTA</button>
+<button onclick="setRango('MEDIA')">MEDIA</button>
+<button onclick="setRango('BAJA')">BAJA</button>
 
-<div class="range">
-<button id="alta">ALTA</button>
-<button id="media">MEDIA</button>
-<button id="baja">BAJA</button>
-</div>
-
-<div id="loader">
-⚡ GENERANDO...
-<div style="height:6px;background:#003;margin-top:8px;">
-<div id="bar" style="height:100%;width:0%;background:#00eaff;"></div>
-</div>
-</div>
+<br>
 
 <button onclick="generar(true)">CON DPI</button>
 <button onclick="generar(false)">SIN DPI</button>
+
+<div id="resultado">---</div>
 </div>
 
-<div class="resultado" id="resultado"></div>
+<div id="vipBtn" onclick="abrirVIP()">VIP</div>
 
-<div class="vipPanel" id="vipPanel"></div>
-
-</div>
-
-<!-- BOTÓN VIP -->
-<button id="vipBtn" onclick="abrirVip()">VIP</button>
-
-<!-- LOGIN -->
-<div id="loginVip">
-<input id="userVip" placeholder="Usuario">
-<input id="passVip" placeholder="Clave">
-<button onclick="validarVip()">ENTRAR</button>
+<div id="panelVIP">
+<div id="vipResultado"></div>
 </div>
 
 <script>
-let rango="";
+let rango="ALTA";
 
-alta.onclick=()=>select("ALTA");
-media.onclick=()=>select("MEDIA");
-baja.onclick=()=>select("BAJA");
-
-function select(r){
+function setRango(r){
 rango=r;
-document.querySelectorAll(".range button").forEach(b=>b.classList.remove("active"));
-document.getElementById(r.toLowerCase()).classList.add("active");
 }
 
 function generar(dpi){
 let marca=document.getElementById("marca").value;
 let modelo=document.getElementById("modelo").value;
+let resultado=document.getElementById("resultado");
 
-if(!marca||!modelo||!rango){alert("Completa todo");return;}
+resultado.innerHTML="⏳ Generando...";
 
-const loader=document.getElementById("loader");
-const bar=document.getElementById("bar");
-const resultado=document.getElementById("resultado");
+setTimeout(()=>{
+let base=modelo.length*7;
 
-loader.style.display="block";
-resultado.style.display="none";
-bar.style.width="0%";
-
-let progreso=0;
-
-let intervalo=setInterval(()=>{
-progreso+=5;
-bar.style.width=progreso+"%";
-
-if(progreso>=100){
-clearInterval(intervalo);
-loader.style.display="none";
-resultado.style.display="block";
-
-function precision(min,max,peso){
-let seed=(marca+modelo).split("").reduce((a,c)=>a+c.charCodeAt(0),0);
-let random=Math.sin(seed*peso)*10000;
-let variacion=random-Math.floor(random);
-
-let valor=min+(max-min)*variacion;
-
-let headBoost=1+(Math.abs(Math.sin(seed))*0.08);
-
-if(rango==="ALTA"){valor*=1.10*headBoost;}
-else if(rango==="MEDIA"){valor*=1.04*headBoost;}
-else{valor*=0.96*headBoost;}
-
-valor+=(Math.cos(seed+peso)*2);
-
-return Math.round(Math.max(min,Math.min(valor,max)));
-}
-
-const sens={
-general:precision(180,200,9),
-red:precision(150,190,13),
-x2:precision(140,185,17),
-x4:precision(130,175,21),
-boton:precision(60,85,5)
+let sens={
+general:190+base,
+red:160+base,
+x2:140+base,
+x4:130+base,
+boton:60+base
 };
 
 resultado.innerHTML=`
-=== SENCI GENERADA ===<br>
-RANGO:${rango}<br>
-DISPOSITIVO:${modelo}<br>
-MARCA:${marca}<br>
-GENERAL:${sens.general}<br>
-ROJO:${sens.red}<br>
-X2:${sens.x2}<br>
-X4:${sens.x4}<br>
-BOTON:${sens.boton}<br>
-DPI:${dpi?"411":"DEFAULT"}<br>
-🎯 HEADSHOT EXTREMO
+<div style="text-align:center;">🔥 SENCI PRO 🔥</div>
+📱 ${marca} - ${modelo}<br>
+⚡ ${rango} | ${dpi?"DPI 411":"SIN DPI"}<br><hr>
+
+GENERAL → ${sens.general}<br>
+
+MIRA DE PUNTO ROJO → ${sens.red}<br>
+
+MIRA X2 → ${sens.x2}<br>
+
+MIRA X4 → ${sens.x4}<br>
+
+MIRA FRANCOTIRADOR → ${sens.x4 + 10}<br>
+
+BOTÓN DE CÁMARA 360° → ${sens.boton}<br>
+
+<hr>
+🎯 HEADSHOT
 `;
-}
-},50);
-}
-
-/* VIP */
-function abrirVip(){
-document.getElementById("loginVip").style.display="block";
+},1000);
 }
 
-function validarVip(){
-let u=document.getElementById("userVip").value;
-let p=document.getElementById("passVip").value;
+function abrirVIP(){
+let u=prompt("Usuario:");
+let p=prompt("Clave:");
 
 if(u==="SALITA" && p==="22"){
-document.getElementById("loginVip").style.display="none";
-let vip=document.getElementById("vipPanel");
-vip.style.display="block";
+
+document.querySelector(".panel").style.display="none";
+document.getElementById("vipBtn").style.display="none";
+
+let panelVIP=document.getElementById("panelVIP");
+panelVIP.style.display="block";
+
+let vip=document.getElementById("vipResultado");
 
 vip.innerHTML=`
-💀 SENCI PROHIBIDA 💀<br>
-GENERAL:200<br>
-ROJO:195<br>
-X2:190<br>
-X4:185<br>
-BOTON:80<br>
-🔥 SOLO HEADSHOT
+<h2>💀 VIP EXTREMO 💀</h2>
+
+GENERAL: 200<br>
+MIRA DE PUNTO ROJO: 180<br>
+MIRA X2: 170<br>
+MIRA X4: 160<br>
+MIRA FRANCOTIRADOR: 190<br>
+BOTÓN 360°: 70<br>
+
+<button onclick="cerrarVIP()">SALIR</button>
 `;
+
 }else{
 alert("Acceso denegado");
 }
 }
-</script>
 
-<script>
-const canvas=document.getElementById("fondo");
-const ctx=canvas.getContext("2d");
+function cerrarVIP(){
+document.getElementById("panelVIP").style.display="none";
+document.querySelector(".panel").style.display="block";
+document.getElementById("vipBtn").style.display="flex";
+}
 
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+/* PARTICULAS */
+let c=document.getElementById("bg");
+let ctx=c.getContext("2d");
 
-let puntos=[];
+c.width=window.innerWidth;
+c.height=window.innerHeight;
 
-for(let i=0;i<80;i++){
-puntos.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
+let dots=[];
+
+for(let i=0;i<50;i++){
+dots.push({
+x:Math.random()*c.width,
+y:Math.random()*c.height,
 r:Math.random()*2,
-dx:(Math.random()-0.5)*1.2,
-dy:(Math.random()-0.5)*1.2
+dx:Math.random()-0.5,
+dy:Math.random()-0.5
 });
 }
 
-function animar(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-puntos.forEach(p=>{
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+function draw(){
+ctx.clearRect(0,0,c.width,c.height);
 ctx.fillStyle="#00eaff";
+
+dots.forEach(d=>{
+ctx.beginPath();
+ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
 ctx.fill();
 
-p.x+=p.dx;
-p.y+=p.dy;
+d.x+=d.dx;
+d.y+=d.dy;
 
-if(p.x<0||p.x>canvas.width)p.dx*=-1;
-if(p.y<0||p.y>canvas.height)p.dy*=-1;
+if(d.x<0||d.x>c.width) d.dx*=-1;
+if(d.y<0||d.y>c.height) d.dy*=-1;
 });
 
-requestAnimationFrame(animar);
+requestAnimationFrame(draw);
 }
 
-animar();
-
-window.addEventListener("resize",()=>{
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-});
+draw();
 </script>
 
 </body>
