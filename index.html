@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SENCI SALITA</title><style>
+<title>Generador de Sensi</title><style>
 body{margin:0;background:#000;font-family:Arial;color:white;position:relative;overflow:hidden;}
 
 /* CAPA DE FONDO ANIMADO */
@@ -108,7 +108,7 @@ animation:flashAnim 0.5s ease;
 <div class="anuncio">
 <div class="cerrar" onclick="cerrarAnuncio()">✖</div>
 <div class="titulo-anuncio">🚀 NUEVA ACTUALIZACIÓN</div>
-<p>Se actualizó la SENCI SALITA 🔥</p>
+<p>Se actualizó el GENERADOR DE SENCI SALITA 🔥</p>
 </div>
 </div><script>
 let tipoActual="normal";
@@ -146,22 +146,30 @@ let texto=marca+modelo;
 
 let base=0;
 for(let i=0;i<texto.length;i++){
-base+=texto.charCodeAt(i);
+base+=texto.charCodeAt(i)*(i+1);
 }
-base=base%50;
+// base más precisa tipo "hacker"
+base=(base%60)+10;
 
 let mult=1;
-if(tipoActual==='premium') mult=1.3;
-if(tipoActual==='inspirada') mult=0.8;
+if(tipoActual==='premium') mult=1.35; // más potente
+if(tipoActual==='inspirada') mult=0.85; // más control
+
+// ajuste tipo Marechal (micro precisión)
+let micro = (texto.length * 7) % 15;
 
 let sens={
-general:Math.floor((150+base)*mult),
-red:Math.floor((130+base)*mult),
-x2:Math.floor((120+base)*mult),
-x4:Math.floor((110+base)*mult),
-awm:Math.floor((125+base)*mult),
-boton:Math.floor((50+base)*mult)
+general:Math.floor((150+base+micro)*mult),
+red:Math.floor((120+base+micro)*mult),
+x2:Math.floor((90+base)*mult),
+x4:Math.floor((170+base+micro)*mult),
+awm:Math.floor((110+base+micro)*mult),
+boton:Math.floor((60+base)*mult)
 };
+
+// suavizado tipo pro player
+function suavizar(v){return Math.floor((v*0.92)+(Math.random()*4));}
+for(let k in sens){sens[k]=suavizar(sens[k]);}
 
 // LIMITES 1 - 200
 function limitar(v,max){
