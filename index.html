@@ -2,7 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generador de Sensi</title><style>
+<title>SENCI SALITA</title><style>
 body{margin:0;background:#000;font-family:Arial;color:white;position:relative;overflow:hidden;}
 
 /* CAPA DE FONDO ANIMADO */
@@ -69,8 +69,8 @@ animation:flashAnim 0.5s ease;
 </style></head><body><div class="container">
 <h1>✨ Gerador de Sensi</h1><div class="tabs">
 <div class="tab active" onclick="setTab(this,'normal')">Sensi Normal</div>
-<div class="tab" onclick="setTab(this,'premium')">👑 Sensi Premium</div>
-<div class="tab" onclick="setTab(this,'inspirada')">⚡ Sensi Inspirada</div>
+<div class="tab" onclick="setTab(this,'premium')">👑 Sensi Alta</div>
+<div class="tab" onclick="setTab(this,'inspirada')">⚡ Sensi Media</div>
 </div><input id="marca" placeholder="Marca del dispositivo">
 <input id="modelo" placeholder="Modelo del dispositivo"><div class="volver">← Voltar</div><div class="box"><button onclick="generarSenci()" style="width:100%;padding:10px;margin-bottom:10px;border:none;border-radius:10px;background:#ff2a2a;color:white;font-weight:bold;">🚀 GENERAR SENCI</button>
 
@@ -108,7 +108,7 @@ animation:flashAnim 0.5s ease;
 <div class="anuncio">
 <div class="cerrar" onclick="cerrarAnuncio()">✖</div>
 <div class="titulo-anuncio">🚀 NUEVA ACTUALIZACIÓN</div>
-<p>Se actualizó el GENERADOR DE SENCI SALITA 🔥</p>
+<p>Se actualizó la SENCI SALITA 🔥</p>
 </div>
 </div><script>
 let tipoActual="normal";
@@ -152,6 +152,21 @@ base+=texto.charCodeAt(i)*(i+1);
 base=(base%60)+10;
 
 let mult=1;
+
+// DETECCIÓN REAL DE GAMA
+let textoLower = texto.toLowerCase();
+let gama = "media";
+
+if(textoLower.includes("pro") || textoLower.includes("ultra") || textoLower.includes("iphone") || textoLower.includes("s23") || textoLower.includes("s24")){
+  gama = "alta";
+}
+else if(textoLower.includes("lite") || textoLower.includes("a") || textoLower.includes("g") || textoLower.includes("core")){
+  gama = "baja";
+}
+
+// ajuste por gama
+if(gama === "alta") mult += 0.15;
+if(gama === "baja") mult -= 0.1;
 if(tipoActual==='premium') mult=1.35; // más potente
 if(tipoActual==='inspirada') mult=0.85; // más control
 
